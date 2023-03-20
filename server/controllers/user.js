@@ -135,15 +135,17 @@ export const updateUser = async (req, res) => {
 
     const  {email , profileImage:imageName} = foundUser;
 
-
-    const { profileImage } = req.files;
-    const { name: fileName , size } = profileImage;
-
     let updateBody = {};
     Object.keys(req.body).forEach((key)=>{
         updateBody[key] = req.body[key]
     })
 
+   
+
+   
+    if(req.files){
+      const { profileImage } = req.files;
+      const { name: fileName , size } = profileImage;
     if (fileName) {
       const allowedExt = ["jpg", "jpeg", "png"];
       const limit = 5 * 1024 * 1024;
@@ -185,6 +187,7 @@ export const updateUser = async (req, res) => {
           });
           updateBody['profileImage'] = fileName
     }
+  }
 
     const updatedUser = await User.findOneAndUpdate(
       { userId },
